@@ -25,6 +25,21 @@ venv/
 .ipynb_checkpoints
 *.ipynb_checkpoints
 
+# PaddleDetection（太大，不提交）
+PaddleDetection/
+
+# PaddlePaddle 模型文件
+models/*.pdmodel
+models/*.pdiparams
+models/*.pdopt
+model/
+inference_model/
+output/
+
+# 提交包
+submission/
+submission.zip
+
 # 其他
 .DS_Store
 *.log

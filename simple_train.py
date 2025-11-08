@@ -168,7 +168,7 @@ def train():
     print(f"\n🏋️  开始训练 (共 {len(train_loader)} 个批次)...")
     print("⚠️  CPU 训练会比较慢，请耐心等待...\n")
 
-    num_epochs = 10  # 先训练 10 个 epoch 看看效果
+    num_epochs = 3  # Demo版本：快速训练3个epoch
 
     model.train()
     for epoch in range(num_epochs):

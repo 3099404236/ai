@@ -201,28 +201,54 @@ def train():
         avg_epoch_loss = total_loss / len(train_loader)
         print(f"\n✅ Epoch {epoch+1} 完成, 平均损失: {avg_epoch_loss:.4f}\n")
 
-    # 保存模型
+    # 保存训练权重
     output_dir = '/home/user/ai/models'
     os.makedirs(output_dir, exist_ok=True)
     model_path = os.path.join(output_dir, 'animal_detector.pdparams')
     paddle.save(model.state_dict(), model_path)
 
     print("=" * 60)
-    print(f"✅ 训练完成！模型已保存到: {model_path}")
+    print(f"✅ 训练完成！训练权重已保存到: {model_path}")
     print("=" * 60)
 
-    # 保存训练信息
+    # 导出推理模型（比赛提交用）
+    print("\n🔄 导出推理模型...")
+    inference_dir = os.path.join(output_dir, 'inference')
+    os.makedirs(inference_dir, exist_ok=True)
+
+    # 切换到评估模式
+    model.eval()
+
+    # 创建示例输入用于导出
+    dummy_input = paddle.randn([1, 3, 640, 640], dtype='float32')
+
+    # 使用 jit.save 导出推理模型
+    inference_model_path = os.path.join(inference_dir, 'model')
+    paddle.jit.save(
+        layer=model,
+        path=inference_model_path,
+        input_spec=[paddle.static.InputSpec(shape=[None, 3, 640, 640], dtype='float32', name='image')]
+    )
+
+    print(f"✅ 推理模型已导出到: {inference_dir}/")
+    print(f"   - model.pdmodel")
+    print(f"   - model.pdiparams")
+
+    # 保存模型信息
     info = {
         'num_classes': 3,
         'classes': ['monkey', 'panda', 'wolf'],
         'img_size': 640,
-        'epochs': num_epochs
+        'epochs': num_epochs,
+        'input_shape': [1, 3, 640, 640],
+        'inference_model': inference_model_path
     }
 
     with open(os.path.join(output_dir, 'model_info.json'), 'w') as f:
         json.dump(info, f, indent=2)
 
-    print(f"📄 模型信息已保存")
+    print(f"\n📄 模型信息已保存到: {output_dir}/model_info.json")
+    print("\n🎉 训练和导出全部完成！可以用于比赛提交。")
 
 
 if __name__ == '__main__':

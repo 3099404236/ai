@@ -1,0 +1,30 @@
+# 数据集文件（避免提交大文件）
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# 模型文件
+models/*.pth
+models/*.pt
+models/*.h5
+models/*.pkl
+!models/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints
+
+# 其他
+.DS_Store
+*.log
